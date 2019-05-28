@@ -2,14 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+    <title>Prices</title>
 </head>
 <body>
-    {%  for price in prices %}
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-end align-items-lg-center">
+            {% for price in prices %}
+            <div>
+                <div class="card bg-light bg-secondary mx-1 my-2"
+                     style="width: 10rem;">
+                    <div class="card-header">{{ price.symbol }}</div>
+                    <div class="card-body">
+                        <p class="card-text"> {{ price.price }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 
-        <div>{{ price.symbol }}</div>
-        <div>{{ price.price }}</div>
-
-    {%  endfor %}
 </body>
 </html>
