@@ -5,6 +5,11 @@
     <title>Title</title>
 </head>
 <body>
-    <p>{{ status }}</p>
+    {%  for price in prices %}
+
+        <div>{{ price.symbol }}</div>
+        <div>{{ price.price }}</div>
+
+    {%  endfor %}
 </body>
 </html>

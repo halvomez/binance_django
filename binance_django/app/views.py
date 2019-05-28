@@ -7,6 +7,8 @@ def index(request):
     secret_key = 'IvXFouzzfA149RMYuu9FryUt7N3Bj4bVzZbd7A9JTxNM0tWzCigEvukpy5CumbQ3'
 
     client = Client(api_key, secret_key)
-    status = client.get_system_status()
+    prices = client.get_all_tickers()
 
-    return render(request, 'app/index.html', context={'status': status})
+    return render(request, 'app/index.html', context={
+        'prices': prices
+    })
