@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from binance.client import Client
+from .models import Binance
+from django.db import transaction
 
 
 def index(request):
@@ -7,7 +9,14 @@ def index(request):
     secret_key = 'IvXFouzzfA149RMYuu9FryUt7N3Bj4bVzZbd7A9JTxNM0tWzCigEvukpy5CumbQ3'
 
     client = Client(api_key, secret_key)
-    prices = client.get_all_tickers()
+    data = client.get_all_tickers()
+
+    with transaction.atomic():
+        for item in data:
+            result = Binance(symbol=item['symbol'], price=item['price'])
+            result.save()
+
+    prices = Binance.objects.all()
 
     return render(request, 'app/index.html', context={
         'prices': prices
