@@ -14,7 +14,13 @@ def index(request):
     with transaction.atomic():
         for item in data:
             result = Binance(symbol=item['symbol'], price=item['price'])
-            result.save()
+            try:
+                record = Binance.objects.get(symbol=item['symbol'])
+
+                if record and record.refresh is True:
+                    result.save()
+            except Binance.DoesNotExist:
+                result.save()
 
     prices = Binance.objects.all()
 
