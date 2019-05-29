@@ -1,7 +1,9 @@
+import json
 from django.shortcuts import render
 from binance.client import Client
 from .models import Binance
 from django.db import transaction
+from django.http import JsonResponse
 
 
 def index(request):
@@ -27,3 +29,12 @@ def index(request):
     return render(request, 'app/index.html', context={
         'prices': prices
     })
+
+
+def switch(request):
+    data = json.loads(request.body)
+    result = Binance.objects.get(symbol=data['symbol'])
+    result.refresh = not result.refresh
+    result.save()
+
+    return JsonResponse({'status': 1}, safe=False)
