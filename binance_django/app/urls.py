@@ -2,5 +2,6 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
-    path('', index, name='main-page')
+    path('', index, name='main-page'),
+    path('switch/', switch, name='switch')
 ]
