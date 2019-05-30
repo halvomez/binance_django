@@ -34,7 +34,7 @@ def index(request):
 def switch(request):
     data = json.loads(request.body)
     with transaction.atomic():
-        for symbol in data:
+        for symbol in data['symbol']:
             result = Binance.objects.get(symbol=symbol)
             result.refresh = not result.refresh
             result.save()
