@@ -24,7 +24,7 @@ def index(request):
             except Binance.DoesNotExist:
                 result.save()
 
-    prices = Binance.objects.all()
+    prices = Binance.objects.all().order_by('symbol')
 
     return render(request, 'app/index.html', context={
         'prices': prices
@@ -33,8 +33,10 @@ def index(request):
 
 def switch(request):
     data = json.loads(request.body)
-    result = Binance.objects.get(symbol=data['symbol'])
-    result.refresh = not result.refresh
-    result.save()
+    with transaction.atomic():
+        for symbol in data:
+            result = Binance.objects.get(symbol=symbol)
+            result.refresh = not result.refresh
+            result.save()
 
     return JsonResponse({'status': 1}, safe=False)
