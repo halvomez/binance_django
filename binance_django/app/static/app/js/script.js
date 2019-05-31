@@ -24,9 +24,14 @@ function switch_refresh(data, target) {
         }
     };
 
-    xhr.setRequestHeader('X-CSRFToken', token);
+    xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.send(JSON.stringify(data));
+}
+
+function getCookie(name) {
+    let cookie = `; ${document.cookie}`.match(`;\\s*${name}=([^;]+)`);
+    return cookie ? cookie[1] : '';
 }
 
 const main = document.querySelector('.main');
