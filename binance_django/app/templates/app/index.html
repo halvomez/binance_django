@@ -9,25 +9,21 @@
           crossorigin="anonymous">
     <title>Prices</title>
 </head>
-<body>
+<body style="background: url({% static 'app/img/pale-taupe.png' %})">
+<div class="container">
 <div class="d-flex flex-wrap justify-content-center" style="margin-top: 20px">
     <a href="{% url 'main-page' %}" class="btn btn-warning mx-2">refresh</a>
     <button type="submit" class="btn btn-success btn-clear mx-2">clear stopped</button>
 </div>
-<div class="main d-flex flex-wrap justify-content-around" style="margin-top: 20px">
+<div class="main d-flex flex-wrap justify-content-center" style="margin-top: 20px">
     {% for price in prices %}
-        <div class="card bg-light bg-secondary mx-1 my-2" style="width: 10rem;">
-            <div class="card-header symbol">{{ price.symbol }}</div>
-            <div class="card-body">
-                <p class="card-text"> {{ price.price }}</p>
-                {% if price.refresh %}
-                    <button type="submit" class="btn btn-secondary switch">stop</button>
-                {% else %}
-                    <button type="submit" class="btn btn-danger switch">stopped</button>
-                {% endif %}
-            </div>
-        </div>
+        <button class="d-flex flex-column align-items-center btn btn-secondary btn-switch my-1 mx-1 py-0 px-0" style="width: 150px">
+            <span class="my-0 px-0 py-0 mx-auto btn-text btn-symbol text-center" style="font-size: 18px;font-weight: bolder;">{{ price.symbol }}</span>
+            <span class="my-0 py-0 mx-auto btn-text btn-price" style="font-size: 16px">{{ price.price}}</span>
+            <span class="my-0 py-0 mx-auto btn-text btn-state" style="font-size: 13px">click to freeze</span>
+        </button>
     {% endfor %}
+</div>
 </div>
 <script>
     const url = "{% url 'switch' %}";
