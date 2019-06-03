@@ -1,9 +1,17 @@
-function switch_refresh(data, target) {
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', url);
+async function switch_refresh(data, target) {
+    const options = {
+        'method': 'POST',
+        'headers': {
+            'X-CSRFToken': getCookie('csrftoken'),
+            "Content-Type": "application/json"
+        },
+        'body': JSON.stringify(data)
+    };
 
-    xhr.onreadystatechange = () => {
-        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+    try {
+        const result = await fetch(url, options);
+
+        if (result.ok) {
             if (target instanceof NodeList) {
                 for (const item of target) {
                     item.innerHTML = 'stop';
@@ -22,11 +30,9 @@ function switch_refresh(data, target) {
                 }
             }
         }
-    };
-
-    xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.send(JSON.stringify(data));
+    } catch (e) {
+        throw new Error(`${e.name} ${e.message}`)
+    }
 }
 
 function getCookie(name) {
@@ -35,21 +41,21 @@ function getCookie(name) {
 }
 
 const main = document.querySelector('.main');
-main.addEventListener('click', (evt) => {
+main.addEventListener('click', async (evt) => {
     const button = evt.target;
     if (button.classList.contains('switch')) {
         const data = {'symbol': []};
         data['symbol'].push(button.parentNode.parentNode.querySelector('.symbol').innerHTML);
-        switch_refresh(data, button);
+        await switch_refresh(data, button);
     }
 });
 
 const clear_button = document.querySelector('.btn-clear');
-clear_button.addEventListener('click', () => {
+clear_button.addEventListener('click', async () => {
     const buttons_stopped = document.querySelectorAll('.btn-danger');
     const data = {'symbol': []};
     for (const button of buttons_stopped) {
         data['symbol'].push(button.parentNode.parentNode.querySelector('.symbol').innerHTML);
     }
-    switch_refresh(data, buttons_stopped);
+    await switch_refresh(data, buttons_stopped);
 });
