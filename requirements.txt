@@ -1,2 +1,2 @@
 python_binance==0.7.1
-Django==2.2.1
+Django==2.2.13
